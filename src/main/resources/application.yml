@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: ApiGateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: city-routes
+          uri: lb://city-service/api/v1/movie-booking/city-service
+          predicates:
+            - Path=/api/v1/movie-booking/city-service/**
+        - id: theatre-service
+          uri: lb://theatre-service/api/v1/movie-booking/theatre-service
+          predicates:
+            - Path=/api/v1/movie-booking/theatre-service/**
+        - id: movie-service
+          uri: lb://movie-service/api/v1/movie-booking/movie
+          predicates:
+            - Path=/api/v1/movie-booking/movie-service/**
+        - id: booking
+
+server:
+  port: 9000
+  servlet:
+    context-path: api/v1/movie-booking/
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+logging:
+  level:
+    root: INFO
